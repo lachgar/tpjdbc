@@ -114,6 +114,24 @@ public class MachineService implements IDao<Machine> {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
+		return machines;		
+	}
+	
+	
+	public List<Machine> findBetweenDate(java.util.Date d1, java.util.Date d2) {
+		List<Machine> machines = new ArrayList<Machine>();
+		try {
+			String sql = "select * from machine where dateAchat between ? and ?";
+			PreparedStatement st = Connexion.getConnection().prepareStatement(sql);
+			st.setDate(1, new Date(d1.getTime()));
+			st.setDate(2, new Date(d2.getTime()));
+			ResultSet rs = st.executeQuery();
+			while (rs.next())
+				machines.add(new Machine(rs.getInt("id"), rs.getString("reference"), rs.getString("marque"),
+						rs.getDouble("prix"), rs.getDate("dateAchat"), ss.findById(rs.getInt("salle"))));
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
 		return machines;
 	}
 
