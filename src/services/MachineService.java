@@ -100,5 +100,21 @@ public class MachineService implements IDao<Machine> {
 		}
 		return machines;
 	}
+	
+	
+	public List<Machine> findMachinesBySalle(Salle s) {
+		List<Machine> machines = new ArrayList<Machine>();
+		try {
+			String sql = "select * from machine where salle = "+ s.getId();
+			Statement st = Connexion.getConnection().createStatement();
+			ResultSet rs = st.executeQuery(sql);
+			while (rs.next())
+				machines.add(new Machine(rs.getInt("id"), rs.getString("reference"), rs.getString("marque"),
+						rs.getDouble("prix"), rs.getDate("dateAchat"), ss.findById(rs.getInt("salle"))));
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return machines;
+	}
 
 }
